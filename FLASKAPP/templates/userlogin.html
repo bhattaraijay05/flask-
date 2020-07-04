@@ -1,0 +1,136 @@
+{% extends "layout.html" %}
+
+
+{% block title %}<title>LogIn</title>
+<style>
+    .loginbody {
+        color: #fff;
+        background-color: #3598dc;
+        font-family: 'Roboto', sans-serif;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+
+    .form-control {
+        height: 41px;
+        background: #f2f2f2;
+        box-shadow: none !important;
+        border: none;
+    }
+
+    .form-control:focus {
+        background: #e2e2e2;
+    }
+
+    .form-control,
+    .btn {
+        border-radius: 3px;
+    }
+
+    .login-form {
+        width: 400px;
+        margin: 30px auto;
+    }
+
+    .login-form form {
+        color: #999;
+        border-radius: 3px;
+        margin-bottom: 15px;
+        background: #fff;
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+        padding: 30px;
+    }
+
+    .login-form h2 {
+        color: #333;
+        font-weight: bold;
+        margin-top: 0;
+    }
+
+    .login-form hr {
+        margin: 0 -30px 20px;
+    }
+
+    .login-form .form-group {
+        margin-bottom: 20px;
+    }
+
+    .login-form input[type="checkbox"] {
+        margin-top: 3px;
+    }
+
+    .login-form .row div:first-child {
+        padding-right: 10px;
+    }
+
+    .login-form .row div:last-child {
+        padding-left: 10px;
+    }
+
+    .login-form .btn {
+        font-size: 16px;
+        font-weight: bold;
+        background: #3598dc;
+        border: none;
+        min-width: 140px;
+    }
+
+    .login-form .btn:hover,
+    .login-form .btn:focus {
+        background: #2389cd !important;
+        outline: none;
+    }
+
+    .login-form a {
+        color: #fff;
+        text-decoration: underline;
+    }
+
+    .login-form a:hover {
+        text-decoration: none;
+    }
+
+    .login-form form a {
+        color: #3598dc;
+        text-decoration: none;
+    }
+
+    .login-form form a:hover {
+        text-decoration: underline;
+    }
+
+    .login-form .hint-text {
+        padding-bottom: 15px;
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+
+<div class="loginbody mb-0">
+
+    <div class="login-form">
+        <form action="/login" method="post">
+            <h2>User LogIn </h2>
+            <hr>
+            <div class="form-group">
+                <input type="text" class="form-control" name="usernames" placeholder="Username/Email" required="required">
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" name="passwords" placeholder="Password"
+                    required="required">
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-lg">LogIn</button>
+                <p class="bold">New User SIGNUP <a href="/signup">here</a></p>
+            </div>
+        </form>
+        <div class="form-group">
+            <h1> <b>Admin</b></h1>
+            <a href="/adminlogin"><button type="menu" class="btn btn-success btn-lg">LogIn Here</button></a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

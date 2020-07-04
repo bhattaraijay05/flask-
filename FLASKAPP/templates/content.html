@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+
+<title>Add/Edit Content</title>
+
+{% endblock %}
+
+{% block body %}
+<section class="mb-4 m-3 p-3">
+    <h1> <b> Welcome {{params['admin']}} </b></h1>
+    <h2 class="h1-responsive font-weight-bold text-center my-4">Edit the post {{post.title}}</h2>
+    <p class="text-center w-responsive mx-auto mb-5">Hello {{params['admin']}} edit the content for the page</p>
+    <div class="row">
+        <div class="col-md-9 mb-md-0 mb-5">
+            <form id="contact-form" name="sentMessage" action="/content/{{post.sn}}" method="POST">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="md-form mb-0">
+                            <input type="text" id="name" name="title" value="{{post.title}}" class="form-control">
+                            <label for="name" class="">Your Title</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="md-form mb-0">
+                            <input type="text" id="slug" name="slug" value="{{post.slug}}" class="form-control">
+                            <label for="email" class="">Your Slug</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="md-form">
+                            <textarea type="text" id="content" name="content" rows="3"
+                                class="form-control md-textarea">{{post.content}}</textarea>
+                            <label for="message">Your Content</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="md-form">
+                            <input type="text" id="image" name="imagefile" value="{{post.image}}" rows="3"
+                                class="form-control md-textarea"></input>
+                            <label for="message">Image URL</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center text-md-left">
+                    <a class="btn btn-primary" onclick="document.getElementById('contact-form').submit();">
+           
+                        &rAarr;Submit&lAarr; </a>
+                    
+                </div>
+                <div class="status"></div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

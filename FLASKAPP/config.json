@@ -1,0 +1,11 @@
+{
+    "params": {
+        "local_server": "True",
+        "local_uri": "mysql://root:@localhost/mydata",
+        "insta_url": "https://www.instagram.com/bhattaraijay05",
+        "tw_url": "https://www.twitter.com/bhattaraijay1",
+        "page_title": "FlaskWebsite",
+        "number_of_posts_per_page": 6,
+        "admin": "illogical"
+    }
+}

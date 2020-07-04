@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block title %}
+
+{% for post in posts %}
+<title>{{post.title}}</title>
+
+{% endfor %}
+{% endblock %}
+
+{% block body %}
+<div class=" ">
+    {% for post in posts %}
+    <div class="">
+        <img class="card-img-top p-4 d-flex justify-content-center" src="{{post.image}}" alt="Image Loading" width="400"
+            height="400">
+        <div class="card-body">
+            <h5 class="card-title">{{post.title}}</h5>
+            <p class="card-text">{{post.content}}</p>
+        </div>
+        <div class="card-footer">
+            <small class="text-muted">{{post.date}}</small>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
