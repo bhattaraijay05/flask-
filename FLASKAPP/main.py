@@ -4,6 +4,7 @@ import json
 import math
 from datetime import datetime
 import os
+import re
 
 with open("config.json", 'r') as c:
     params = json.load(c)["params"]
@@ -41,7 +42,7 @@ class Users(db.Model):
     email = db.Column(db.String(20), nullable=False, unique=True)
     password = db.Column(db.String(20), nullable=False)
     confirm_password = db.Column(db.String(20), nullable=False)
-    phone = db.Column(db.String(20), nullable=False, unique=True)
+    phone = db.Column(db.Integer, nullable=False, unique=True)
     date_created = db.Column(db.String(20), nullable=True)
 
 
@@ -99,8 +100,50 @@ def contact():
     return render_template('contact.html', params=params)
 
 
+@app.route('/login', methods=['GET', 'POST'])
+def loginuser():
+    users = Users.query.all()
+    for user in users:
+        if ('user' in session and session['user'] == user.username):
+            return render_template('profile.html', params=params)
+
+    if request.method == "POST":
+        username = request.form.get('usernames')
+        password = request.form.get('passwords')
+        if (username == user.username and password == user.password):
+            session['user'] = user.username
+            return render_template('profile.html', params=params, users=user.username, passs=user.password)
+        else:
+            flash(
+                "No user exist with this username and password. Please double check the username and password", "danger")
+
+    return render_template('userlogin.html', params=params)
+
+
+def passwordValidation(password):
+    passwd = password
+    reg = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{6,20}$"
+
+    # compiling regex
+    pat = re.compile(reg)
+
+    # searching regex
+    mat = re.search(pat, passwd)
+
+    if not mat:
+        return False
+    else:
+        return True
+
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+
+    users = Users.query.all()
+    for user in users:
+        if ('user' in session and session['user'] == user.username):
+            return render_template('profile.html', params=params)
+
     if (request.method == 'POST'):
         first_name = request.form.get('first_name')
         last_name = request.form.get('last_name')
@@ -112,10 +155,22 @@ def signup():
         date = datetime.now()
         signingup = Users(first_name=first_name, last_name=last_name, username=username,
                           email=email, password=password, confirm_password=confirm_password, phone=phone, date_created=date)
-        db.session.add(signingup)
-        db.session.commit()
-        flash("Thanks for signing up. Look your profile", "success")
-        return render_template('profile.html', params=params)
+
+        if (username == user.username or email == user.email):
+            flash("User already exists with given details", "danger")
+        elif(not passwordValidation(password)):
+            flash(
+                "Password is very weak, it must contain atleast 8 character with special symbols and numbers", "danger")
+        elif(not phone.isnumeric()):
+            flash("What kind of phone number is that", "danger")
+        elif(password != confirm_password):
+            flash("Passwords doesnot match", "danger")
+        else:
+            db.session.add(signingup)
+            db.session.commit()
+            flash("Thanks for signing up. Look your profile", "success")
+            session['user'] = user.username
+            return render_template('profile.html', params=params)
     return render_template('signup.html', params=params)
 
 
@@ -183,26 +238,6 @@ def posts_route(posts_slug):
 def logout():
     session.pop('user', None)
     return redirect(url_for('loginadmin'))
-
-
-@app.route('/login', methods=['GET', 'POST'])
-def loginuser():
-    for x in range(5):
-        users = Users.query.filter_by(sn=x+1).first().username
-        passs = Users.query.filter_by(sn=x+1).first().password
-        break
-    if ('user' in session and session['user'] == users):
-        return render_template('profile.html', params=params)
-
-    if request.method == "POST":
-        username = request.form.get('usernames')
-        password = request.form.get('passwords')
-        if (username == users and password == passs):
-            session['user'] = users
-            return render_template('profile.html', params=params, users=users, passs=passs)
-        flash("No user exist with this username and password. Please double check the username and password", "danger")
-
-    return render_template('userlogin.html', params=params)
 
 
 @app.route('/adminlogin', methods=['GET', 'POST'])
