@@ -1,19 +1,25 @@
-from flask import Flask, render_template, request, session, url_for, redirect, flash
+from flask import Flask, render_template, request, session, url_for, redirect, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import json
 import math
 from datetime import datetime
 import os
+import pickle
 import re
+import numpy as np
+import pandas as pd
 
 with open("config.json", 'r') as c:
     params = json.load(c)["params"]
+
 
 app = Flask(__name__)
 
 app.secret_key = 'super secret key'
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('LOCAL_URI')
 db = SQLAlchemy(app)
+
+# model = pickle.load(open("model1.pkl", "rb"))
 
 
 class Contacts(db.Model):
@@ -265,12 +271,57 @@ def help():
     return render_template('help.html', params=params)
 
 
+@app.route('/dashboard/')
+def dashboard():
+    return render_template('dashboard.html', params=params)
+
+
+@app.route('/predict/')
+def predict():
+    filename = 'output.csv'
+    data = pd.read_csv(filename, header=0)
+    params = list(data.values)
+    return render_template('predict.html', params=params)
+
+
+@app.route('/visualize/')
+def visualize():
+    return render_template('visualize.html', params=params)
+
+
 @app.route('/admindashboard')
 def admindashboard():
     if ('user' in session and session['user'] == os.getenv('ADMIN_USERNAME')):
         posts = Posts.query.filter_by().all()
         return render_template('admindashboard.html', params=params, posts=posts)
     return render_template('adminlogin.html', params=params)
+
+# 'center_meal_id', 'center_id', 'meal_id', 'cuisine', 'category', 'city_code', 'region_code', 'center_type'
+# @app.route('/model')
+# def modelPred():
+#     prediction = model.predict(["1379560","1","55","1885","30","30","0","0","1544"])
+#     print(prediction)
+#     return jsonify(prediction[0]),200,
+
+
+# @app.route('/model')
+# def modelPred():
+#     # prediction = model.predict(["1","30","30","2.0","-8","1.266667","-0.266667"])
+#     prediction = model.predict([	"146","55","1885",	"38",	"30","0",	"0",	"10",	"1.0","1.0",	"647"	"56","1.0",	"2.0",	"55.1885",	"-8",	"1.266667",	"-0.266667",	"1545.296552",	"1546.0",	"55.854116",	"260.005441",	"97",	"401.396215",	"1549.831049",	"1549.0",	"57.843062",	"231.619175",	"75",	"394.509601",	"527.556464",	"108",	"642.561732",	"239.006085",	"77",	"384.592322",	"226.048382",	"72",	"374.08354",	"250.736959",	"85",	"396.813511"])
+
+#     print(prediction)
+#     return jsonify(prediction),500,
+
+
+# @app.route('/model')
+# def modelPred():
+#     # prediction = model.predict(["1","30","30","2.0","-8","1.266667","-0.266667"])
+#     prediction = model.predict([	"146", "55", "1885",	"38",	"30", "0",	"0",	"0",	"1.0", "1.0",	"647"	"56", "1.0",	"2.0",	"55.1885",	"-8",	"1.266667",	"-0.266667",	"1545.296552",	"1546.0",	"55.854116",	"260.005441",	"97",
+#                                "401.396215",	"1549.831049",	"1549.0",	"57.843062",	"231.619175",	"75",	"394.509601",	"527.556464",	"108",	"642.561732",	"239.006085",	"77",	"384.592322",	"226.048382",	"72",	"374.08354",	"250.736959",	"85",	"396.813511"])
+#     pred = (np.exp(prediction) - 1)
+#     print(pred)
+#     # print(prediction)
+#     return jsonify(pred), 200,
 
 
 app.run(debug=True)

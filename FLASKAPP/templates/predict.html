@@ -1,0 +1,30 @@
+{% extends "layout.html" %} {% block title %}
+<title>Predict</title>
+
+{% endblock %} {% block body %}
+<div class="row">
+  <div class="container">
+    <h2 class="mx-auto m-3 p-3">Predict Section</h2>
+
+    <table class="table table-striped table-sm">
+      <thead>
+        <tr>
+          <th>Meal Name</th>
+          <th>Number of Orders</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for value in params %}
+        <tr>
+          <td>{{ value[0] }}</td>
+          <td>{{ value[1] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <a href="/visualize"><button class="btn btn-success">Visualize</button></a>
+  </div>
+</div>
+
+{% endblock %}

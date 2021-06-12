@@ -1,0 +1,8 @@
+flask
+flask_sqlalchemy
+mysqlclient
+python-dotenv
+pickle-mixin
+pandas 
+numpy
+catboost
